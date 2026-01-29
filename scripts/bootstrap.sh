@@ -102,7 +102,13 @@ cat >"$CONFIG_FILE" <<EOF
       },
       "sandbox": {
         "mode": "non-main",
-        "scope": "session"
+        "scope": "session",
+        "docker": {
+          "host": "${DOCKER_HOST:-tcp://docker-proxy:2375}"
+        },
+        "browser": {
+          "enabled": true
+        }
       }
     },
     "list": [
@@ -165,7 +171,7 @@ cat >"$CONFIG_FILE" <<EOF
   "gateway": {
     "port": ${CLAWDBOT_GATEWAY_PORT:-18789},
     "mode": "local",
-    "bind": "0.0.0.0",
+    "bind": "lan",
     "controlUi": {
       "enabled": true,
       "allowInsecureAuth": false
