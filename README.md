@@ -52,7 +52,9 @@ Need to show a client your work?
 2.  Navigate to **Project** > **New**.
 3.  Select **Public Repository**.
 4.  Enter the URL: `https://github.com/essamamdani/moltbot-coolify`
-5.  Click **Continue**.
+5.  **Important**: When generating a domain, remember to append the port number (e.g., `:18789`) after the domain.
+    *   Example: `https://openclaw.your-domain.com:18789`
+6.  Click **Continue**.
 
 ---
 
