@@ -6,6 +6,7 @@ services:
       - registry-data:/var/lib/registry
     environment:
       REGISTRY_HTTP_SECRET: ${SERVICE_BASE64_REGISTRY}
+
   openclaw:
     build:
       context: .
@@ -42,7 +43,6 @@ services:
       # Tell the binary where to look for state/config
       OPENCLAW_STATE_DIR: /data/.openclaw
       OPENCLAW_WORKSPACE: /data/openclaw-workspace
-
       # API Keys injected from .env or Coolify
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       MINIMAX_API_KEY: ${MINIMAX_API_KEY}
@@ -53,12 +53,10 @@ services:
       MOONSHOT_API_KEY: ${KIMI_API_KEY}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       SANDBOX_CONTAINER: ${SANDBOX_CONTAINER:-false}
-      
       # Optional integrations
       GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
       NANOBANANA_API_KEY: ${NANOBANANA_API_KEY}
       ELEVENLABS_API_KEY: ${ELEVENLABS_API_KEY}
-
       SERVICE_URL_OPENCLAW_18789: null
       SERVICE_URL_OPENCLAWWEBHOOK_8788: null
       BASE_URL: 'https://${SERVICE_FQDN_OPENCLAW}'
@@ -70,7 +68,6 @@ services:
       # Fix for EMFILE/Inotify issues in Docker
       CHOKIDAR_USEPOLLING: "true"
       # Public URL Access
-
       CF_TUNNEL_TOKEN: ${CF_TUNNEL_TOKEN}
       # Deployment & Git
       VERCEL_ORG_ID: ${VERCEL_ORG_ID}
@@ -81,18 +78,12 @@ services:
       GITHUB_EMAIL: ${GITHUB_EMAIL}
       # Optional
       OPENCLAW_BETA: ${OPENCLAW_BETA:-false}
-
     volumes:
       - openclaw-data:/data
       - openclaw-config:/root/.openclaw
       - openclaw-workspace:/root/openclaw-workspace
-
-      # Secure: Socket mount removed in favor of proxy
-      # - /var/run/docker.sock:/var/run/docker.sock
-
     depends_on:
       - docker-proxy
-
     command: ["bash", "/app/scripts/bootstrap.sh"]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:18789/"]
@@ -108,35 +99,37 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       # Security: Only enable necessary Docker APIs
-      POST: 1       # Create containers
+      POST: 1 # Create containers
       CONTAINERS: 1 # List/manage containers
-      IMAGES: 1     # Pull images
-      NETWORKS: 1   # Connect to networks
-      INFO: 1       # Version check
+      IMAGES: 1 # Pull images
+      NETWORKS: 1 # Connect to networks
+      INFO: 1 # Version check
       VERSION: 1
-      EXEC: 1       # Run commands (exec)
-      EVENTS: 1     # Listen for events (if needed)
+      EXEC: 1 # Run commands (exec)
+      EVENTS: 1 # Listen for events (if needed)
 
-  searxng:
-    build:
-      context: .
-      dockerfile: searxng/Dockerfile
-    restart: unless-stopped
-    volumes:
-      - searxng-data:/var/lib/searxng
-    environment:
-      SEARXNG_BASE_URL: http://searxng:8080
-      SEARXNG_SERVER_SECRET_KEY: ${SERVICE_BASE64_SEARXNG}
-    cap_drop:
-      - ALL
-    cap_add:
-      - CHOWN
-      - SETGID
-      - SETUID
+  # searxng: Temporarily disabled to speed up build and avoid failures
+  # Uncomment this block later if you need SearXNG search engine
+  # searxng:
+  #   build:
+  #     context: .
+  #     dockerfile: searxng/Dockerfile
+  #   restart: unless-stopped
+  #   volumes:
+  #     - searxng-data:/var/lib/searxng
+  #   environment:
+  #     SEARXNG_BASE_URL: http://searxng:8080
+  #     SEARXNG_SERVER_SECRET_KEY: ${SERVICE_BASE64_SEARXNG}
+  #   cap_drop:
+  #     - ALL
+  #   cap_add:
+  #     - CHOWN
+  #     - SETGID
+  #     - SETUID
 
 volumes:
   openclaw-data:
   openclaw-config:
   openclaw-workspace:
-  searxng-data:
+  # searxng-data:  # Comment this too if searxng is disabled
   registry-data:
