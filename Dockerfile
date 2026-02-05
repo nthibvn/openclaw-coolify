@@ -126,9 +126,9 @@ RUN --mount=type=cache,target=/data/.npm \
     exit 1; \
     fi
 
-# AI Tool Suite & ClawHub
-#RUN curl -fsSL https://claude.ai/install.sh | bash && \
-#    curl -L https://code.kimi.com/install.sh | bash
+# AI Tool Suite & ClawHub - COMMENTED OUT to prevent build failure (these URLs/scripts are not public or fail)
+# RUN curl -fsSL https://claude.ai/install.sh | bash && \
+#     curl -L https://code.kimi.com/install.sh | bash
 
 # Stage 5: Final application stage (changes frequently)
 FROM dependencies AS final
@@ -145,8 +145,9 @@ RUN ln -sf /data/.claude/bin/claude /usr/local/bin/claude 2>/dev/null || true &&
     ln -sf /app/scripts/openclaw-approve.sh /usr/local/bin/openclaw-approve && \
     chmod +x /app/scripts/*.sh /usr/local/bin/openclaw-approve
 
-# ✅ FINAL PATH (important)
+# FINAL PATH (important)
 ENV PATH="/usr/local/go/bin:/usr/local/bin:/usr/bin:/bin:/data/.local/bin:/data/.npm-global/bin:/data/.bun/bin:/data/.bun/install/global/bin:/data/.claude/bin:/data/.kimi/bin"
 
 EXPOSE 18789
+
 CMD ["bash", "/app/scripts/bootstrap.sh"]
