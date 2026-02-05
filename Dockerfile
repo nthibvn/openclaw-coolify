@@ -127,8 +127,8 @@ RUN --mount=type=cache,target=/data/.npm \
     fi
 
 # AI Tool Suite & ClawHub
-RUN curl -fsSL https://claude.ai/install.sh | bash && \
-    curl -L https://code.kimi.com/install.sh | bash
+#RUN curl -fsSL https://claude.ai/install.sh | bash && \
+#    curl -L https://code.kimi.com/install.sh | bash
 
 # Stage 5: Final application stage (changes frequently)
 FROM dependencies AS final
